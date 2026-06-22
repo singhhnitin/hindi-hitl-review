@@ -210,27 +210,26 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 </style>
 """, unsafe_allow_html=True)
 
-LOGO_SVG = """
-<svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <line x1="23" y1="11" x2="11" y2="33" stroke="#0E7C7B" stroke-width="2"/>
-  <line x1="23" y1="11" x2="35" y2="33" stroke="#0E7C7B" stroke-width="2"/>
-  <line x1="11" y1="33" x2="35" y2="33" stroke="#0E7C7B" stroke-width="2" stroke-opacity="0.4"/>
-  <circle cx="23" cy="11" r="7" fill="#0E7C7B"/>
-  <circle cx="11" cy="33" r="6" fill="#14181A"/>
-  <circle cx="35" cy="33" r="6" fill="#D97706"/>
-</svg>
-"""
+LOGO_SVG = (
+    '<svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">'
+    '<line x1="23" y1="11" x2="11" y2="33" stroke="#0E7C7B" stroke-width="2"/>'
+    '<line x1="23" y1="11" x2="35" y2="33" stroke="#0E7C7B" stroke-width="2"/>'
+    '<line x1="11" y1="33" x2="35" y2="33" stroke="#0E7C7B" stroke-width="2" stroke-opacity="0.4"/>'
+    '<circle cx="23" cy="11" r="7" fill="#0E7C7B"/>'
+    '<circle cx="11" cy="33" r="6" fill="#14181A"/>'
+    '<circle cx="35" cy="33" r="6" fill="#D97706"/>'
+    '</svg>'
+)
+
 
 # ── Header ──────────────────────────────────────────────────────────────
-st.markdown(f"""
-<div class="app-header">
-    {LOGO_SVG}
-    <div>
-        <div class="header-title">DBpedia Hindi Chapter</div>
-        <div class="header-subtitle">Knowledge graph triple review · subject · relation · object</div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+header_html = (
+    '<div class="app-header">' + LOGO_SVG.strip() +
+    '<div><div class="header-title">DBpedia Hindi Chapter</div>'
+    '<div class="header-subtitle">Knowledge graph triple review · subject · relation · object</div>'
+    '</div></div>'
+)
+st.markdown(header_html, unsafe_allow_html=True)
 
 with st.expander("About this tool"):
     st.markdown(
@@ -294,8 +293,10 @@ total = len(queue)
 # ── Sidebar ───────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("##### Review progress")
-    st.metric("Reviewed", f"{len(st.session_state.decisions)} / {total}")
-    st.progress(min(len(st.session_state.decisions) / total, 1.0) if total else 0)
+    decisions_made = len(st.session_state.decisions)
+    st.metric("Decisions logged", decisions_made)
+    st.caption(f"Queue size: {total} item{'s' if total != 1 else ''}")
+    st.progress(min(decisions_made / total, 1.0) if total else 0)
 
     st.markdown("---")
     st.markdown("##### Filter queue")
@@ -353,13 +354,15 @@ with col1:
     st.markdown(f'<div class="sentence-box">{row.get("sentence", "")}</div>', unsafe_allow_html=True)
 
     st.markdown("<br>**Extracted triple**", unsafe_allow_html=True)
-    st.markdown(f"""
-    <div class="chip-row">
-        <div class="chip"><div class="chip-label">Subject</div><div class="chip-value">{row.get("subject","")}</div></div>
-        <div class="chip"><div class="chip-label">Relation</div><div class="chip-value">{row.get("relation","")}</div></div>
-        <div class="chip"><div class="chip-label">Object</div><div class="chip-value">{row.get("object","")}</div></div>
-    </div>
-    """, unsafe_allow_html=True)
+    chip_html = (
+        '<div class="chip-row">'
+        f'<div class="chip"><div class="chip-label">Subject</div><div class="chip-value">{row.get("subject","")}</div></div>'
+        f'<div class="chip"><div class="chip-label">Relation</div><div class="chip-value">{row.get("relation","")}</div></div>'
+        f'<div class="chip"><div class="chip-label">Object</div><div class="chip-value">{row.get("object","")}</div></div>'
+        '</div>'
+    )
+    st.markdown(chip_html, unsafe_allow_html=True)
+
 
 with col2:
     st.markdown("**Suggested mapping**")
@@ -370,10 +373,12 @@ with col2:
         st.markdown('<div class="suggestion-uri" style="color:#8A938F;">No property suggested</div>', unsafe_allow_html=True)
 
     pct = max(0, min(100, score * 100))
-    st.markdown(f"""
-    <div class="meter"><div class="meter-fill" style="width:{pct}%; background:{meter_color};"></div></div>
-    <div class="suggestion-caption">Confidence {score:.2f} · matched via {method or "—"}</div>
-    """, unsafe_allow_html=True)
+    meter_html = (
+        f'<div class="meter"><div class="meter-fill" style="width:{pct}%; background:{meter_color};"></div></div>'
+        f'<div class="suggestion-caption">Confidence {score:.2f} · matched via {method or "—"}</div>'
+    )
+    st.markdown(meter_html, unsafe_allow_html=True)
+
 
 st.markdown('<div class="app-divider"></div>', unsafe_allow_html=True)
 
