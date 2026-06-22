@@ -99,6 +99,10 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
     gap: 16px;
     margin-bottom: 6px;
 }
+.app-header .dbpedia-logo {
+    height: 42px;
+    width: auto;
+}
 .app-header .header-title {
     font-family: 'Lora', serif;
     font-weight: 600;
@@ -210,21 +214,14 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 </style>
 """, unsafe_allow_html=True)
 
-LOGO_SVG = (
-    '<svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">'
-    '<line x1="23" y1="11" x2="11" y2="33" stroke="#0E7C7B" stroke-width="2"/>'
-    '<line x1="23" y1="11" x2="35" y2="33" stroke="#0E7C7B" stroke-width="2"/>'
-    '<line x1="11" y1="33" x2="35" y2="33" stroke="#0E7C7B" stroke-width="2" stroke-opacity="0.4"/>'
-    '<circle cx="23" cy="11" r="7" fill="#0E7C7B"/>'
-    '<circle cx="11" cy="33" r="6" fill="#14181A"/>'
-    '<circle cx="35" cy="33" r="6" fill="#D97706"/>'
-    '</svg>'
-)
+DBPEDIA_LOGO_URL = "https://commons.wikimedia.org/wiki/Special:FilePath/DBpedia_logo.svg"
+
 
 
 # ── Header ──────────────────────────────────────────────────────────────
 header_html = (
-    '<div class="app-header">' + LOGO_SVG.strip() +
+    '<div class="app-header">'
+    f'<img src="{DBPEDIA_LOGO_URL}" alt="DBpedia" class="dbpedia-logo">'
     '<div><div class="header-title">DBpedia Hindi Chapter</div>'
     '<div class="header-subtitle">Knowledge graph triple review · subject · relation · object</div>'
     '</div></div>'
